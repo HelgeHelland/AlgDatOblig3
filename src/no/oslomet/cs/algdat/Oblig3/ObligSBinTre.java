@@ -46,9 +46,33 @@ public class ObligSBinTre<T> implements Beholder<T>
   @Override
   public boolean leggInn(T verdi)
   {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+    Objects.requireNonNull(verdi, "Verdi som legges inn kan ikke være null");
+
+    Node<T> currentNode = rot;
+    Node<T> parentNode = null;
+    int cmp = 0;
+
+    while(currentNode != null){
+      parentNode = currentNode;
+      cmp = comp.compare(verdi, currentNode.verdi);
+      currentNode = cmp < 0 ? currentNode.venstre : currentNode.høyre;
+    }
+
+    currentNode = new Node<>(verdi, parentNode);
+
+    if(parentNode == null){
+      rot = currentNode;
+    } else if(cmp < 0){
+      parentNode.venstre = currentNode;
+    } else{
+      parentNode.høyre = currentNode;
+    }
+
+    antall++;
+    endringer++;
+    return true;
   }
-  
+
   @Override
   public boolean inneholder(T verdi)
   {
@@ -178,5 +202,4 @@ public class ObligSBinTre<T> implements Beholder<T>
     }
 
   } // BladnodeIterator
-
 } // ObligSBinTre
