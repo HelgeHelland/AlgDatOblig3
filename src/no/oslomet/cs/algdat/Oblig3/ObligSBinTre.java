@@ -152,9 +152,29 @@ public class ObligSBinTre<T> implements Beholder<T>
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
   
-  public String omvendtString()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public String omvendtString(){
+    if (rot == null) return "[]";
+
+    ArrayList<T> omvendtString = new ArrayList<>();
+    Stack<Node> stack = new Stack<Node>();
+    Node current = rot;
+
+    while (current != null || stack.size() > 0)
+    {
+
+      while (current !=  null)
+      {
+        stack.push(current);
+        current = current.høyre;
+      }
+
+      current = stack.pop();
+
+      omvendtString.add((T)current.verdi);
+
+      current = current.venstre;
+    }
+    return omvendtString.toString();
   }
   
   public String høyreGren()
