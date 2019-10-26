@@ -26,7 +26,7 @@ public class ObligSBinTre<T> implements Beholder<T>
     }
 
     @Override
-    public String toString(){ return "" + verdi;}
+    public String toString(){ throw new UnsupportedOperationException("Ikke kodet ennå!"); }
 
   } // class Node
 
@@ -92,14 +92,43 @@ public class ObligSBinTre<T> implements Beholder<T>
   }
   
   @Override
-  public boolean fjern(T verdi)
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public boolean fjern(T verdi){
+    if (antall == 0 || verdi == null) return false;
+
+    Node current = rot;
+
+    if(comp.compare(verdi, (T) rot.verdi) == 0 && antall == 1){
+      rot = null;
+      return true;
+    }else if(comp.compare(verdi,(T)rot.verdi) == 0){
+      rot.høyre.venstre = rot.venstre;
+      rot.høyre = rot;
+      return true;
+    }
+
+    while(current != null){
+      int cmp = comp.compare(verdi, (T)current.verdi);
+      if(cmp == 0){//verdiene er like
+        if(current.forelder.venstre != null && current.forelder.venstre.equals(current)){
+          current.forelder.venstre = current.venstre;
+          current.venstre.forelder = current.forelder;
+        }else{
+          current.forelder.høyre = current.høyre;
+          current.høyre.forelder = current.forelder;
+        }
+        return true;
+      }else if(cmp == -1){//Verdien er større en current.verdi
+        current = current.høyre;
+      }else{
+        current = current.venstre;
+      }
+    }
+    return false;
   }
   
   public int fjernAlle(T verdi)
   {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
   
   @Override
@@ -162,12 +191,33 @@ public class ObligSBinTre<T> implements Beholder<T>
   @Override
   public String toString()
   {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+//    throw new UnsupportedOperationException("Ikke kodet ennå!");
+    return "Hei";
   }
   
-  public String omvendtString()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public String omvendtString(){
+    if (rot == null) return "[]";
+
+    ArrayList<T> omvendtString = new ArrayList<>();
+    Stack<Node> stack = new Stack<Node>();
+    Node current = rot;
+
+    while (current != null || stack.size() > 0)
+    {
+
+      while (current !=  null)
+      {
+        stack.push(current);
+        current = current.høyre;
+      }
+
+      current = stack.pop();
+
+      omvendtString.add((T)current.verdi);
+
+      current = current.venstre;
+    }
+    return omvendtString.toString();
   }
   
   public String høyreGren()
