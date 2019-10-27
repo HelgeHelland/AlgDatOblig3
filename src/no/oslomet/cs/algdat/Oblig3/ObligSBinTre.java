@@ -98,13 +98,14 @@ public class ObligSBinTre<T> implements Beholder<T>
 
     Node current = rot;
 
-    if(comp.compare(verdi, (T) rot.verdi) == 0 && antall == 1){
+    if(comp.compare(verdi, rot.verdi) == 0 && antall == 1){
       rot = null;
       antall--;
       return true;
     }else if(comp.compare(verdi,(T)rot.verdi) == 0){
       rot.høyre.venstre = rot.venstre;
-      rot.høyre = rot;
+      rot = rot.høyre;
+      rot.venstre.forelder = rot;
       antall--;
       return true;
     }
@@ -126,7 +127,7 @@ public class ObligSBinTre<T> implements Beholder<T>
             current.høyre.forelder = current.forelder;
           }
           antall--;
-        }else{}
+        }
         return true;
       }else if(cmp == -1){//Verdien er større en current.verdi
         current = current.venstre;
