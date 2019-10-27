@@ -177,9 +177,12 @@ public class ObligSBinTre<T> implements Beholder<T>
     return harSlettet;
   }
   
-  public int fjernAlle(T verdi)
-  {
-     throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public int fjernAlle(T verdi) {
+    int antall = 0;
+    while(fjern(verdi)){
+      antall++;
+    }
+    return antall;
   }
   
   @Override
@@ -216,9 +219,34 @@ public class ObligSBinTre<T> implements Beholder<T>
   }
   
   @Override
-  public void nullstill()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public void nullstill() {
+    if (rot == null) return;
+
+    ArrayList<Node> list = new ArrayList();
+    Stack<Node> stack = new Stack<Node>();
+    Node current = rot;
+
+    while (current != null || stack.size() > 0)
+    {
+
+      while (current !=  null)
+      {
+        stack.push(current);
+        current = current.høyre;
+      }
+
+      current = stack.pop();
+      list.add(current);
+      current = current.venstre;
+    }
+    for(Node node: list){
+      node.forelder = null;
+      node.venstre = null;
+      node.høyre = null;
+      node.verdi = null;
+    }
+    antall = 0;
+    rot = null;
   }
   
   private static <T> Node<T> nesteInorden(Node<T> p)
