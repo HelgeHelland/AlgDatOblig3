@@ -93,8 +93,7 @@ public class ObligSBinTre<T> implements Beholder<T>
   
   @Override
   public boolean fjern(T verdi){
-    //FIXME funker ikke som den skal
-    if (antall == 0 || verdi == null) return false;
+    if (antall == 0 || verdi == null || rot == null) return false;
 
     Node current = rot;
 
@@ -103,39 +102,79 @@ public class ObligSBinTre<T> implements Beholder<T>
       antall--;
       return true;
     }else if(comp.compare(verdi,(T)rot.verdi) == 0){
-      rot.høyre.venstre = rot.venstre;
-      rot = rot.høyre;
-      rot.venstre.forelder = rot;
+      Node venstre = rot.venstre;
+      if(rot.høyre != null) {
+        rot = rot.høyre;
+        leggTilNode(venstre);
+      }else{
+        rot = venstre;
+        rot.forelder = null;
+      }
       antall--;
       return true;
     }
 
-    while(current != null){
-      int cmp = comp.compare(verdi, (T)current.verdi);
-      if(cmp == 0){//verdiene er like
-        //Verdien ligger til venster
-        if(current.forelder.venstre != null && current.forelder.venstre.equals(current)){
-          current.forelder.venstre = current.venstre;
-          if(current.venstre != null) {
-            current.venstre.forelder = current.forelder;
-          }
-          antall--;
-        //Verdien ligger til høyre
-        }else if (current.forelder.høyre != null && current.forelder.høyre.equals(current)){
-          current.forelder.høyre = current.høyre;
-          if(current.høyre != null) {
-            current.høyre.forelder = current.forelder;
-          }
-          antall--;
+    Boolean harSlettet = false;
+    while (current != null) {
+      int cmp = comp.compare(verdi, (T) current.verdi);
+      //Om verdiene er like har vi funnet verdien som skal fjernes
+      if (cmp == 0) {
+        Node venstre = current.venstre;
+        //Sjekker om current er høyre barn til sin forelder
+        Boolean erHøyreBarn = true;
+        if (current.forelder.venstre != null && current.forelder.venstre == current) {
+          erHøyreBarn = false;
         }
-        return true;
-      }else if(cmp == -1){//Verdien er større en current.verdi
+        //Sjekeker om current har høyre barn
+        Boolean harHøyreBarn = true;
+        if (current.høyre == null) {
+          harHøyreBarn = false;
+        }
+        //Sjekker kombinasjoner av harHøyrebarn og erHøyrebarn
+        if (erHøyreBarn && harHøyreBarn) {
+          current.forelder.høyre = current.høyre;
+          current.høyre.forelder = current.forelder;
+          leggTilNode(current.venstre);
+          antall--;
+          return true;
+        } else if (!erHøyreBarn && harHøyreBarn) {
+          current.forelder.venstre = current.høyre;
+          current.høyre.forelder = current.forelder;
+          leggTilNode(current.venstre);
+          antall--;
+          return true;
+        } else if (current.venstre == null && !harHøyreBarn && erHøyreBarn) {
+          current.forelder.høyre = null;
+          antall--;
+          return true;
+        } else if (current.venstre == null && !harHøyreBarn && !erHøyreBarn) {
+          current.forelder.venstre = null;
+          antall--;
+          return true;
+        } else if (erHøyreBarn && !harHøyreBarn) {
+          current.forelder.høyre = current.venstre;
+          current.venstre.forelder = current.forelder;
+          antall--;
+          return true;
+        } else if (!erHøyreBarn && !harHøyreBarn) {
+          current.forelder.venstre = current.venstre;
+          current.venstre.forelder = current.forelder;
+          antall--;
+          return true;
+        }
+        harSlettet = true;
+      }
+
+      //Sjekker om verdien er mindre en 0, da vet vi at den er til venstre for current ellers er den til høyre
+      if(cmp < 0){
         current = current.venstre;
       }else{
         current = current.høyre;
       }
     }
-    return false;
+
+    if(harSlettet) antall--;
+    return harSlettet;
   }
   
   public int fjernAlle(T verdi)
@@ -272,6 +311,30 @@ public class ObligSBinTre<T> implements Beholder<T>
   public String postString()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
+  }
+
+
+  public void leggTilNode(Node node){
+    if(node == null) return;
+    Node current = rot;
+    Node currentForelder = rot;
+    while (current != null){
+      currentForelder = current;
+      int cmp = comp.compare((T)node.verdi, (T)current.verdi);
+      if(cmp < 0){
+        current = current.venstre;
+      }else{
+        current = current.høyre;
+      }
+    }
+    int cmp = comp.compare((T)node.verdi, (T) currentForelder.verdi);
+    if(cmp < 0){
+      currentForelder.venstre = node;
+      node.forelder = currentForelder;
+    }else{
+      currentForelder.høyre = node;
+      node.forelder = currentForelder;
+    }
   }
   
   @Override
