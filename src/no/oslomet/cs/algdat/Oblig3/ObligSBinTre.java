@@ -357,9 +357,36 @@ public class ObligSBinTre<T> implements Beholder<T>
     return (1 + Math.max(nodeHøyde(node.venstre), nodeHøyde(node.høyre)));
   }
   
-  public String[] grener()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public String[] grener() {
+    ArrayList<Node> bladnodeListe = finBladnoder(new ArrayList(), rot);
+    String[] grener = new String[bladnodeListe.size()];
+
+    int i = 0;
+    for(Node node : bladnodeListe){
+      ArrayList<T> liste = new ArrayList();
+      while(node != null){
+        liste.add((T)node.verdi);
+        node = node.forelder;
+      }
+      //Swaper rekkefølgen på arrayet for å få riktig
+      for(int j = 0; j < liste.size()/2; j++){
+        T temp = liste.get(j);
+        liste.set(j, liste.get(liste.size()-1-j));
+        liste.set(liste.size()-1-j, temp);
+      }
+      grener[i++] = liste.toString();
+    }
+    return grener;
+  }
+
+  public ArrayList<Node> finBladnoder(ArrayList bladnodeListe , Node current){
+    if(current == null) return bladnodeListe;
+    if(current.venstre == null && current.høyre == null) bladnodeListe.add(current);
+    else {
+      finBladnoder(bladnodeListe, current.venstre);
+      finBladnoder(bladnodeListe, current.høyre);
+    }
+    return bladnodeListe;
   }
   
   public String bladnodeverdier()
