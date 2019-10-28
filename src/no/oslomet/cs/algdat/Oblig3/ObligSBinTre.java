@@ -316,14 +316,45 @@ public class ObligSBinTre<T> implements Beholder<T>
     return omvendtString.toString();
   }
   
-  public String høyreGren()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public String høyreGren() {
+    ArrayList<T> arrayList = new ArrayList();
+    Node current = rot;
+    if(current != null){
+      arrayList.add((T)current.verdi);
+    }
+    Boolean høyreBladnode = false;
+    while (!høyreBladnode && current != null){
+      if(current.høyre != null){
+        current = current.høyre;
+      }else if(current.høyre == null && current.venstre != null){
+        current = current.venstre;
+      }else if (current.høyre == null && current.venstre == null){
+        høyreBladnode = true;
+        break;
+      }
+      arrayList.add((T)current.verdi);
+    }
+    return arrayList.toString();
   }
   
-  public String lengstGren()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public String lengstGren() {
+    Node current = rot;
+    ArrayList arrayList = new ArrayList();
+    while (current != null){
+      arrayList.add(current.verdi);
+      if(nodeHøyde(current.venstre) >= nodeHøyde(current.høyre)){
+        current = current.venstre;
+      }else{
+        current= current.høyre;
+      }
+    }
+    return arrayList.toString();
+  }
+
+  //Rekursiv methode for å finne høyden til fra en node til bunden av treet
+  public int nodeHøyde(Node node){
+    if(node == null) return 0;
+    return (1 + Math.max(nodeHøyde(node.venstre), nodeHøyde(node.høyre)));
   }
   
   public String[] grener()
