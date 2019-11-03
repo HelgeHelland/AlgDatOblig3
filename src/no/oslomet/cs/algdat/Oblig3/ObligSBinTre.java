@@ -26,7 +26,7 @@ public class ObligSBinTre<T> implements Beholder<T>
     }
 
     @Override
-    public String toString(){ throw new UnsupportedOperationException("Ikke kodet ennå!"); }
+    public String toString(){ return ""+verdi ; }
 
   } // class Node
 
@@ -358,7 +358,7 @@ public class ObligSBinTre<T> implements Beholder<T>
   }
   
   public String[] grener() {
-    ArrayList<Node> bladnodeListe = finBladnoder(new ArrayList(), rot);
+    ArrayList<Node> bladnodeListe = finnBladnoder(new ArrayList(), rot);
     String[] grener = new String[bladnodeListe.size()];
 
     int i = 0;
@@ -379,19 +379,22 @@ public class ObligSBinTre<T> implements Beholder<T>
     return grener;
   }
 
-  public ArrayList<Node> finBladnoder(ArrayList bladnodeListe , Node current){
+  public ArrayList<Node> finnBladnoder(ArrayList bladnodeListe , Node current){
     if(current == null) return bladnodeListe;
     if(current.venstre == null && current.høyre == null) bladnodeListe.add(current);
     else {
-      finBladnoder(bladnodeListe, current.venstre);
-      finBladnoder(bladnodeListe, current.høyre);
+      finnBladnoder(bladnodeListe, current.venstre);
+      finnBladnoder(bladnodeListe, current.høyre);
     }
     return bladnodeListe;
   }
   
   public String bladnodeverdier()
   {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+    ArrayList ff = new ArrayList();
+    Node current = rot;
+    finnBladnoder(ff, current);
+    return ff.toString();
   }
   
   public String postString()
@@ -459,4 +462,14 @@ public class ObligSBinTre<T> implements Beholder<T>
     }
 
   } // BladnodeIterator
+
+  public static void main (String[]args ){
+    ObligSBinTre<Character> tre = new ObligSBinTre<>(Comparator.naturalOrder());
+    char[] verdier = "IATBHJCRSOFELKGDMPQN".toCharArray();
+    for (char c: verdier) tre.leggInn(c);
+
+    System.out.println(tre.bladnodeverdier());
+
+  }
+
 } // ObligSBinTre
