@@ -397,9 +397,33 @@ public class ObligSBinTre<T> implements Beholder<T>
     return ff.toString();
   }
   
-  public String postString()
-  {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+  public String postString(){
+
+// tror jeg prøver med 2 stacker i stedet ugh
+      /*ArrayList<T> postString = new ArrayList<>();
+      Stack<Node> stack = new Stack<>();
+      Node prev = null;
+      if (rot == null) return "[]";
+      while (!stack.isEmpty())
+      {
+          Node current = stack.peek();
+
+          if (prev==null || prev .venstre == current || prev.høyre == current)
+          {
+              if (current.venstre != null){
+                  stack.push(current.venstre);
+              }
+              else if (current.høyre !=null){
+                  stack.push(current.høyre);
+              }
+              else{
+                  stack.pop();
+                  postString.addAll(current.verdi);
+              }
+          }
+
+      }*/
+      return toString();
   }
 
 
@@ -468,7 +492,8 @@ public class ObligSBinTre<T> implements Beholder<T>
     char[] verdier = "IATBHJCRSOFELKGDMPQN".toCharArray();
     for (char c: verdier) tre.leggInn(c);
 
-    System.out.println(tre.bladnodeverdier());
+   // System.out.println(tre.bladnodeverdier());
+    System.out.println(tre.postString());
 
   }
 
