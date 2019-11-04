@@ -398,32 +398,27 @@ public class ObligSBinTre<T> implements Beholder<T>
   }
   
   public String postString(){
+    if (rot == null) return "[]";
+    Stack<Node> stack1 = new Stack<>();
+    Stack<Node> stack2 = new Stack<>();
+    Node node = rot;
+    //rot til første stack
+    stack1.push(node);
+    //kjøre løkke så lenge stack1 ikke er tom
+    while (!stack1.isEmpty()){
+      //Popper fra stack1, pusher til stack2
+      Node temp = stack1.pop();
+      stack2.push(temp);
 
-// tror jeg prøver med 2 stacker i stedet ugh
-      /*ArrayList<T> postString = new ArrayList<>();
-      Stack<Node> stack = new Stack<>();
-      Node prev = null;
-      if (rot == null) return "[]";
-      while (!stack.isEmpty())
-      {
-          Node current = stack.peek();
-
-          if (prev==null || prev .venstre == current || prev.høyre == current)
-          {
-              if (current.venstre != null){
-                  stack.push(current.venstre);
-              }
-              else if (current.høyre !=null){
-                  stack.push(current.høyre);
-              }
-              else{
-                  stack.pop();
-                  postString.addAll(current.verdi);
-              }
-          }
-
-      }*/
-      return toString();
+      //pushe h&v barn fra temp(som er fjernet)til stack1
+      if(temp.venstre != null){
+        stack1.push(temp.venstre);
+      }
+      if(temp.høyre !=null){
+        stack1.push(temp.høyre);
+      }
+    }
+    return stack2.toString();
   }
 
 
@@ -488,13 +483,19 @@ public class ObligSBinTre<T> implements Beholder<T>
   } // BladnodeIterator
 
   public static void main (String[]args ){
-    ObligSBinTre<Character> tre = new ObligSBinTre<>(Comparator.naturalOrder());
+ /*   ObligSBinTre<Character> tre = new ObligSBinTre<>(Comparator.naturalOrder());
     char[] verdier = "IATBHJCRSOFELKGDMPQN".toCharArray();
     for (char c: verdier) tre.leggInn(c);
 
-   // System.out.println(tre.bladnodeverdier());
-    System.out.println(tre.postString());
+    System.out.println(tre.bladnodeverdier());
+    System.out.println(tre.postString());*/
 
+    int [] a = {4,7,2,9,4,10,8,7,4,6};
+    ObligSBinTre<Integer> tre = new ObligSBinTre<>(Comparator.naturalOrder());
+    for(int verdi: a) {
+      tre.leggInn(verdi);
+    }
+    System.out.println(tre.postString());
   }
 
 } // ObligSBinTre
