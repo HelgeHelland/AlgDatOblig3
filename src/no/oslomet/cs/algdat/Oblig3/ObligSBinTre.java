@@ -2,6 +2,7 @@ package no.oslomet.cs.algdat.Oblig3;
 
 ////////////////// ObligSBinTre /////////////////////////////////
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class ObligSBinTre<T> implements Beholder<T>
@@ -401,9 +402,11 @@ public class ObligSBinTre<T> implements Beholder<T>
     if (rot == null) return "[]";
     Stack<Node> stack1 = new Stack<>();
     Stack<Node> stack2 = new Stack<>();
-    Node node = rot;
+    Node<T> current = rot;
+
     //rot til første stack
-    stack1.push(node);
+    stack1.push(current);
+
     //kjøre løkke så lenge stack1 ikke er tom
     while (!stack1.isEmpty()){
       //Popper fra stack1, pusher til stack2
@@ -418,7 +421,13 @@ public class ObligSBinTre<T> implements Beholder<T>
         stack1.push(temp.høyre);
       }
     }
-    return stack2.toString();
+    //for riktig rekkefølge
+    while (!stack2.isEmpty()) {
+      Node temp = stack2.pop();
+      stack1.push(temp);
+    }
+
+    return stack1.toString();
   }
 
 
