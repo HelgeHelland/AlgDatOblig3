@@ -498,27 +498,29 @@ public class ObligSBinTre<T> implements Beholder<T>
       if(p == null){
           throw new NoSuchElementException("tomt for noder");
     }
-      if(!hasNext()){
-          throw new NoSuchElementException();
-      }
-      if(iteratorendringer!=endringer){
-          throw new ConcurrentModificationException();
-      }
 
-      T verdi = p.verdi; // Saver verdi i P
-      q = p; //bytter
-      p=nesteInorden(p); //flytter
+      ArrayList<Node> bladnoder = finnBladnoder(new ArrayList(), p);
 
-        if (p!=null){
-            while(p.venstre!=null||p.høyre!=null){
-                p = nesteInorden(p); //flytter frem til bladn
-            }
+      if(q == null) p = bladnoder.get(0);
+      else{
+        for(int i = 1; i < bladnoder.size()-1; i++){
+          if(bladnoder.get(i).equals(q)){
+            p = bladnoder.get(i+1);
+            break;
+          }
         }
+      }
 
+      if(p.equals(q)){
+        removeOK = false;
+        throw new NoSuchElementException("tom for noder");
+      }
+
+      q = p;
 
       removeOK =true;
 
-      return verdi;
+      return p.verdi;
     }
     
     @Override
