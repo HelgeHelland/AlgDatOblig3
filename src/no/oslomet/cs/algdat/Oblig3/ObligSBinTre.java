@@ -95,6 +95,7 @@ public class ObligSBinTre<T> implements Beholder<T>
   @Override
   public boolean fjern(T verdi){
     if (antall == 0 || verdi == null || rot == null) return false;
+    endringer++;
 
     Node current = rot;
 
@@ -247,6 +248,7 @@ public class ObligSBinTre<T> implements Beholder<T>
       node.verdi = null;
     }
     antall = 0;
+    endringer++;
     rot = null;
   }
   
