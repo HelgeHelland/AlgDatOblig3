@@ -468,7 +468,20 @@ public class ObligSBinTre<T> implements Beholder<T>
     
     private BladnodeIterator()  // konstruktør
     {
-      throw new UnsupportedOperationException("Ikke kodet ennå!");
+      //tomt tre -> p endres ikke
+        if (p == null){
+            return;
+        }
+        if (p!=null){
+            while (p.venstre!=null || p.høyre!=null){
+                if (p.venstre !=null) {
+                    p=p.venstre;
+                }
+                else {
+                    p = p.høyre;
+                }
+            }
+        }
     }
     
     @Override
@@ -480,13 +493,55 @@ public class ObligSBinTre<T> implements Beholder<T>
     @Override
     public T next()
     {
-      throw new UnsupportedOperationException("Ikke kodet ennå!");
+      if(p == null){
+          throw new NoSuchElementException("tomt for noder");
+    }
+      if(!hasNext()){
+          throw new NoSuchElementException();
+      }
+      if(iteratorendringer!=endringer){
+          throw new ConcurrentModificationException();
+      }
+
+      T verdi = p.verdi; // Saver verdi i P
+      q = p; //bytter
+      p=nesteInorden(p); //flytter
+
+        if (p!=null){
+            while(p.venstre!=null||p.høyre!=null){
+                p = nesteInorden(p); //flytter frem til bladn
+            }
+        }
+
+
+      removeOK =true;
+
+      return verdi;
     }
     
     @Override
     public void remove()
     {
-      throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if(!removeOK){
+            throw new IllegalStateException();
+        }
+        Node<T>forelder=q.forelder;
+
+        if(forelder!=null) {
+            if (q == q.forelder.venstre) { //fjerne peker til q fra v
+                q.forelder.venstre = null;
+            } else {
+                q.forelder.høyre = null; //fjerner fra høyre
+            }
+        }
+        else{
+            rot =null;
+        }
+
+        removeOK =false;
+        antall--;
+        iteratorendringer++;
+        endringer++;
     }
 
   } // BladnodeIterator
@@ -501,10 +556,11 @@ public class ObligSBinTre<T> implements Beholder<T>
 
     int [] a = {4,7,2,9,4,10,8,7,4,6};
     ObligSBinTre<Integer> tre = new ObligSBinTre<>(Comparator.naturalOrder());
-    for(int verdi: a) {
+  /*  for(int verdi: a) {
       tre.leggInn(verdi);
     }
-    System.out.println(tre.postString());
+    System.out.println(tre.postString());*/
+    for(Integer k :tre) System.out.print(k+" ");
   }
 
 } // ObligSBinTre
