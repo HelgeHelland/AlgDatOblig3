@@ -1,8 +1,6 @@
 package no.oslomet.cs.algdat.Oblig3;
 
 ////////////////// ObligSBinTre /////////////////////////////////
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class ObligSBinTre<T> implements Beholder<T>
@@ -551,22 +549,5 @@ public class ObligSBinTre<T> implements Beholder<T>
     }
 
   } // BladnodeIterator
-
-  public static void main (String[]args ){
- /*   ObligSBinTre<Character> tre = new ObligSBinTre<>(Comparator.naturalOrder());
-    char[] verdier = "IATBHJCRSOFELKGDMPQN".toCharArray();
-    for (char c: verdier) tre.leggInn(c);
-
-    System.out.println(tre.bladnodeverdier());
-    System.out.println(tre.postString());*/
-
-    int [] a = {4,7,2,9,4,10,8,7,4,6};
-    ObligSBinTre<Integer> tre = new ObligSBinTre<>(Comparator.naturalOrder());
-    for(int verdi: a) {
-      tre.leggInn(verdi);
-    }
-    /*System.out.println(tre.postString());*/
-    for(Integer k :tre) System.out.print(k+" ");
-  }
 
 } // ObligSBinTre
