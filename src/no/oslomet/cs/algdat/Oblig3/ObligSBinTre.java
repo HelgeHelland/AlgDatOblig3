@@ -503,41 +503,22 @@ public class ObligSBinTre<T> implements Beholder<T>
       }
       if(p ==null)throw new NoSuchElementException();
 
-      T verdi = p.verdi;
+      T verdi = p.verdi; //sparer på p før vi bytter
       q=p;
-      while(p.forelder !=null && (p==p.forelder.høyre||p.forelder.høyre==null)){
-          p=p.forelder;
+      //OPP
+      while(p.forelder !=null &&(p==p.forelder.høyre||p.forelder.høyre==null)){ // //F eksisterer, HB eksisterer IKKE
+                  p=p.forelder; //flytter vi oppover i treet
       }
-      if(p.forelder!=null){
-          p= p.forelder.høyre;
+      //NED
+      if(p.forelder!=null){ //F og H eksisterer
+          p= p.forelder.høyre; //flytt til HB (P's søsken)
 
-          while(p.venstre!=null||p.høyre!=null){
-              if(p.venstre!=null){p=p.venstre;}
-              else {p =p.høyre;}
+          while(p.venstre!=null||p.høyre!=null){ //HB eller HV eksisterer
+              if(p.venstre!=null){p=p.venstre;} //flytt til VB om det eksisterer
+              else {p =p.høyre;} //flytt til HB
           }
       }
       else{p=null;}
-
-
-/*      ArrayList<Node> bladnoder = finnBladnoder(new ArrayList(), p);
-
-      if(q == null) p = bladnoder.get(0);
-      else{
-        for(int i = 1; i < bladnoder.size()-1; i++){
-          if(bladnoder.get(i).equals(q)){
-            p = bladnoder.get(i+1);
-            break;
-          }
-        }
-      }
-
-      if(p.equals(q)){
-        removeOK = false;
-       // throw new NoSuchElementException("tom for noder");
-          p= p.høyre;
-      }
-
-      q = p;*/
 
       removeOK =true;
 
@@ -581,10 +562,10 @@ public class ObligSBinTre<T> implements Beholder<T>
 
     int [] a = {4,7,2,9,4,10,8,7,4,6};
     ObligSBinTre<Integer> tre = new ObligSBinTre<>(Comparator.naturalOrder());
-  /*  for(int verdi: a) {
+    for(int verdi: a) {
       tre.leggInn(verdi);
     }
-    System.out.println(tre.postString());*/
+    /*System.out.println(tre.postString());*/
     for(Integer k :tre) System.out.print(k+" ");
   }
 
